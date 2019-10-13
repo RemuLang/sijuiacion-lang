@@ -1,0 +1,33 @@
+goto   : 'goto' name [('if' | 'if-not') expr];
+label  : 'label' name;
+bin    : "bin" '<' name '>' expr expr;
+unary  : "unary" '<' name  '>' expr;
+indir  : 'indir' expr;
+attr   : expr '.' str;
+item   : expr '[' expr ']';
+store  : 'store' name expr;
+load   : 'load' expr;
+global : 'global' name;
+alias  : 'alias' name expr;
+names  : [names ','] name;
+stmt   : expr;
+stmts  : [stmts ','] stmt;
+defun  : 'def' name '(' [names] ')' '{' [stmts] '}';
+
+
+#=
+filename "xxx.mmm"
+line 5
+
+def f(self, b) {
+    line 5
+    push self
+    push b
+    const [1, 2, 3]
+    call 2
+    pop
+    ret 0
+}
+=#
+
+
