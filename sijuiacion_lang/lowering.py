@@ -15,11 +15,14 @@ import sys
 PY38 = sys.version_info >= (3, 8)
 
 
-def find_indir_targets(instrs) -> t.Iterator[str]:
-    return filter(
-        isinstance(_, sij.BlockAddr),
-        instrs
-    ) | map(_.label_name, _0_)
+def find_indir_targets(instrs):
+    ret = set()
+    for instr in instrs:
+        if isinstance(instr, sij.BlockAddr):
+            ret.add(instr.label_name)
+        elif isinstance(instr, sij.Switch):
+            ret.update(instr.table.values())
+    return ret
 
 def lower(
         name,
@@ -34,7 +37,7 @@ def lower(
     should be wrapped in a SETUP_LOOP block
     do some
     """
-    indir_targets = set(find_indir_targets(instrs))
+    indir_targets = find_indir_targets(instrs)
     _line = lineno
     BytecodeInstrType = bytec.Instr
     def set_lineno(instr):
@@ -98,14 +101,20 @@ def lower(
                     if not PY38:
                         yield I.PUSH_BLOCK(i)
                         yield NamedLabel(i)
+                        yield I.LOAD_CONST(True)
+                        yield I.STORE_FAST(PR.REG_TEST_INDIR_JUMPED)
                     yield I.LOAD_CONST(WHY_CONTINUE)
                     yield I.INDIR()
                 if sij.Switch(table):
-                    if not PY38:
-                        yield I.POP_BLOCK()
                     yield I.LOAD_CONST(LabelValueMap(table))
                     yield I.ROT2()
                     yield I.BINARY(sij.BinOp.SUBSCR)
+                    if not PY38:
+                        yield I.PUSH_BLOCK(i)
+                        yield NamedLabel(i)
+                        yield I.LOAD_CONST(True)
+                        yield I.STORE_FAST(PR.REG_TEST_INDIR_JUMPED)
+                    yield I.LOAD_CONST(WHY_CONTINUE)
                     yield I.INDIR()
                 if sij.Bin(bin_op):
                     yield I.BINARY(bin_op)
