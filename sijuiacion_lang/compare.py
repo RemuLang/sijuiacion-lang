@@ -1,1 +1,0 @@
-from bytecode import Compare

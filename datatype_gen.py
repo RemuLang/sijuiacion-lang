@@ -51,6 +51,7 @@ for FROM, TO in [(path, path.with_suffix('.py'))
             continue
         elif head == 'data':
             name, *fields = each
+            code.append('@adt_recog')
             code.append('@dataclass(frozen=True, order=True)')
             code.append(f'class {name}:')
             for v in fields:

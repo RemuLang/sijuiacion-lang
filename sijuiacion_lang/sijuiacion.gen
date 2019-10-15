@@ -1,4 +1,4 @@
-import sijuiacion_lang.compare;
+import sijuiacion_lang.support;
 
 abc Instr;
 enum UOp POSITIVE NEGATIVE NOT INVERT;
@@ -21,6 +21,7 @@ data GotoNEq(Instr) label_name:str;
 data Label(Instr) label_name:str;
 data BlockAddr(Instr) label_name:str;
 data Indir(Instr);
+data Switch(Instr) table:t.Dict[int, str];
 
 data Bin(Instr) op:BinOp;
 data IBin(Instr) op:BinOp;
@@ -33,14 +34,15 @@ data AttrSet(Instr) attr:str;
 data Item(Instr);
 data ItemSet(Instr);
 
-data PyCall(Instr) n:int;
 data Call(Instr) n:int;
+data Print(Instr);
 
 data BuildList(Instr) n:int;
 data BuildTuple(Instr) n:int;
 data ListAppend(Instr) n:int;
 
+data Return(Instr);
 data Line(Instr) no:int;
-data Defun(Instr) name:str args:t.List[str] suite:t.List[t.Union[Line,Instr]];
+data Defun(Instr) doc:str filename:str free:t.List[str] name:str args:t.List[str] suite:t.List[t.Union[Line,Instr]];
 
 data Mod filename:str tops:t.List[Instr];
