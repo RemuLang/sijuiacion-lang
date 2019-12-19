@@ -20,7 +20,7 @@ setup(
     entry_points={"console_scripts": ['sij=sijuiacion_lang.interface:main']},
     # above option specifies commands to be installed,
     # e.g: entry_points={"console_scripts": ["yapypy=yapypy.cmd.compiler"]}
-    install_requires=["rbnf-rts", 'argser', 'typing_extensions'],
+    install_requires=["rbnf-rts", 'argser', 'typing_extensions', 'bytecode'],
     platforms="any",
     classifiers=[
         "Programming Language :: Python :: 3.7",
