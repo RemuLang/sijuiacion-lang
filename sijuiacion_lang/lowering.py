@@ -7,10 +7,11 @@ from sijuiacion_lang.blockaddr import resolve_blockaddr, NamedLabel, LabelValue,
 from sijuiacion_lang import bytecode_instrs as I
 from sijuiacion_lang import preserved_registers as PR
 from sijuiacion_lang import sijuiacion as sij
-from dataclasses import dataclass, astuple
+from dataclasses import dataclass
 import typing as t
 import bytecode as bytec
 import sys
+import warnings
 
 PY38 = sys.version_info >= (3, 8)
 
@@ -23,6 +24,7 @@ def find_indir_targets(instrs):
         elif isinstance(instr, sij.Switch):
             ret.update(instr.table.values())
     return ret
+
 
 def lower(
         name,

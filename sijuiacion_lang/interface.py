@@ -1,5 +1,8 @@
-from sijuiacion_lang.codegen import Codegen
-from sijuiacion_lang.parser_wrap import parse
+import warnings
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", category=SyntaxWarning)    
+    from sijuiacion_lang.codegen import Codegen
+    from sijuiacion_lang.parser_wrap import parse
 
 def load_sij(source: str):
     return Codegen().start(parse(source))
