@@ -13,13 +13,28 @@ firstlineno 5
 const #lambda x: x + 1#
 const #2#
 call 1
-print
-const #None#
 return
 """)
 
 cg = Codegen()
 code = cg.start(ast)
-exec(code)
+assert eval(code) == 3
 
-      
+ast = parse("""
+runtime operator
+firstlineno 5
+defun
+  args [x]
+  {
+  const #add#
+  const #1#
+  load x
+  call 2
+  return
+}
+const #8#
+call 1
+return
+""")
+
+assert eval(cg.start(ast)) == 9

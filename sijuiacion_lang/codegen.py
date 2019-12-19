@@ -68,9 +68,9 @@ class Codegen:
         with match(n.contents):
             if (Token(attrname), a):
                 if attrname in ('document', 'filename', 'name'):
-                    return attrname, a.value
+                    return attrname, eval(a.value)
                 if attrname in ('free', 'args'):
-                    return self.strs(a)
+                    return attrname, self.ids(a)
                 if attrname == 'firstlineno':
                     return 'lineno', int(a.value)
                 if _:
@@ -85,20 +85,20 @@ class Codegen:
                 yield from self.attrs(init)
                 yield self.attr(end)
         
-    def strs(self, n: AST):
+    def ids(self, n: AST):
         with match(n.contents):
             if (_, _):
                 return []
-            if (_, strlist, _):
-                return self.strlist(strlist)
+            if (_, idlist, _):
+                return self.idlist(idlist)
     
-    def strlist(self, n):
+    def idlist(self, n):
         with match(n.contents):
             if (hd, ):
-                return [eval(hd.value)]
+                return [hd.value]
             if (init, end):
-                res = self.strlist(init)
-                res.append(eval(hd.value))
+                res = self.idlist(init)
+                res.append(hd.value)
                 return res
 
     def instr(self, n: AST):
@@ -136,10 +136,11 @@ class Codegen:
                 free = []
                 name = "<unnamed>"
                 args = []
+                # +pattern-matching
                 with match(xs):
-                    if (instrs, ):
+                    if (_, instrs, _):
                         return sij.Defun(doc, filename, free, name, args, self.instrs(instrs))
-                    if (attrs, instrs):
+                    if (attrs, _, instrs, _):
                         instrs = self.instrs(instrs)
                         for attrname, attrvalue in self.attrs(attrs):
                             with match(attrname):
@@ -157,7 +158,6 @@ class Codegen:
                                     instrs = [sij.Line(attrvalue), *instrs]
                                 if _:
                                     raise TypeError("invalid attribute {}".format(attrname))
-                    
                         return sij.Defun(doc, filename, free, name, args, instrs)
                     if _:
                         raise TypeError("invalid args for defun, seems impossible")

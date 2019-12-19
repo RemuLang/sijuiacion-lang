@@ -26,7 +26,7 @@ Instr : 'load'   <ID>
       | 'tuple'       <INT>
       | 'return'
       | 'line'        <INT>
-      | 'defun' [Attrs] Instrs
+      | 'defun' [Attrs] '{' Instrs '}'
      ;
 
 
@@ -34,12 +34,12 @@ Attrs : [Attrs] Attr;
 
 Attr : 'document' <STRING>
      | 'filename' <STRING>
-     | 'free' Strs
+     | 'free' IDs
      | 'name' <STRING>
-     | 'args' Strs
+     | 'args' IDs
      | 'firstlineno' <INT>
     ;
 
-Strs : '[' [StrList] ']';
-StrList : [StrList] <STRING>;
+IDs : '[' [IDList] ']';
+IDList : [IDList] <ID>;
 
