@@ -1,5 +1,4 @@
 from bytecode import Compare
-from dataclasses import astuple
 
 def adt_recog(cls):
     anns = getattr(cls, '__annotations__', {})
@@ -7,6 +6,12 @@ def adt_recog(cls):
     @staticmethod
     def __match__(i, val):
         if i is n_field and isinstance(val, cls):
-            return astuple(val)
+            try:
+                xs = []
+                for each in  cls.__annotations__:
+                    xs.append(getattr(val, each))
+                return tuple(xs)
+            except AttributeError:
+                return ()
     cls.__match__ = __match__
     return cls

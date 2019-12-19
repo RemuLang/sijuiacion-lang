@@ -1,4 +1,4 @@
-from sijuiacion_lang.lowering import *
+from sijuiacion_lang.lowering import sij, lower
 
 
 def mk_code(label):
@@ -96,3 +96,4 @@ f(45)
 # ======input=45======
 # 7
 # 8
+

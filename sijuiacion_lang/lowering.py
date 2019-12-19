@@ -50,7 +50,6 @@ def lower(
         if indir_targets and not PY38:
             yield I.LOAD_CONST(False)
             yield I.STORE_FAST(PR.REG_TEST_INDIR_JUMPED)
-
         for i, instr in enumerate(instrs):
             i = i + 1
             with match(instr):
@@ -161,6 +160,7 @@ def lower(
                     )
                     yield I.LOAD_CONST(code)
                     yield I.LOAD_CONST(name)
+                    yield I.MAKE_FUNCTION(has_free)
 
     code = bytec.Bytecode([set_lineno(instr) for instr in gen_instrs()])
     code.argnames.extend(args)
