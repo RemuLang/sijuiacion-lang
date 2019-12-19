@@ -31,9 +31,7 @@ code = lower(
         sij.Print(),
         sij.Const(2),
         sij.Call(1),
-        sij.Print(),
-        sij.Const(None),
         sij.Return()
   ]
 )
-exec(code)
+print(eval(code) == 2)
