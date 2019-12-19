@@ -1,0 +1,45 @@
+START :
+  <BOF>
+  'runtime' <ID>
+  [Attrs]
+  Instrs 
+  <EOF>
+  ;
+
+Instrs : [Instrs] Instr;
+
+Instr : 'load'   <ID>
+      | 'store'  <ID>
+      | 'deref'  <ID>
+      | 'refset' <ID>
+      | 'const'  <PY>
+      | 'pop'
+      | 'rot'    <INT>
+      | 'dup'    <INT>
+      | 'goto'   <ID>
+      | 'goto-if' <ID>
+      | 'goto-if-not' <ID>
+      | 'label'       <ID>
+      | 'call'        <ID>
+      | 'print'
+      | 'list'        <INT>
+      | 'tuple'       <INT>
+      | 'return'
+      | 'line'        <INT>
+      | 'defun' [Attrs] Instrs
+     ;
+
+
+Attrs : [Attrs] Attr;
+
+Attr : 'document' <STRING>
+     | 'filename' <STRING>
+     | 'free' Strs
+     | 'name' <STRING>
+     | 'args' Strs
+     | 'firstlineno' <INT>
+    ;
+
+Strs : '[' [StrList] ']';
+StrList : [StrList] <STRING>;
+
