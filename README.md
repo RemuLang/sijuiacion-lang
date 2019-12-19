@@ -1,4 +1,4 @@
-## sijuiacion-lang
+# sijuiacion-lang
 
 Sijuiacion, a.k.a "橘势", is a programming language to achieve a better use of
 a subset of of the CPython bytecode instructions.
@@ -8,8 +8,35 @@ and the Switch instructions, that are much more efficient than stacked if-else s
 
 This idea is not originated by me, and I even just heard(got introduced about)
 this from someone else. I must appreciate him for bringing me how to
-use `END_FINALLY` to achieve this "fast switch" in Python, but I really really hate him.
+use `END_FINALLY` to achieve this "fast switch" in Python.
 
+# Installation
+
+Clone this repo, and
+
+```
+pip install -U moshmosh-base --no-compile
+cd sijuiacion-lang
+pip install . --no-compile
+```
+
+# Usage
+
+```
+> cat x.sij
+
+    runtime sys
+    filename "x.sij"
+    firstlineno 3
+    const #1#
+    print
+    const #2#
+    return
+
+> sij xxx.sij
+1 
+2
+```
 
 # Preview
 

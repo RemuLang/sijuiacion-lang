@@ -1,0 +1,7 @@
+runtime sys
+filename "x.sij"
+firstlineno 3
+const #1#
+print
+const #2#
+return

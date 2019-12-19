@@ -37,4 +37,6 @@ call 1
 return
 """)
 
-assert eval(cg.start(ast)) == 9
+code = cg.start(ast)
+assert eval(code) == 9
+    
