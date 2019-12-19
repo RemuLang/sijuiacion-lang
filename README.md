@@ -43,6 +43,7 @@ return
 cg = Codegen()
 code = cg.start(ast)
 exec(code)
+# 3
 ```
 
 ## Python APIs
