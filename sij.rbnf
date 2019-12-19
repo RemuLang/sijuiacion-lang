@@ -20,7 +20,7 @@ Instr : 'load'   <ID>
       | 'goto-if' <ID>
       | 'goto-if-not' <ID>
       | 'label'       <ID>
-      | 'call'        <ID>
+      | 'call'        <INT>
       | 'print'
       | 'list'        <INT>
       | 'tuple'       <INT>

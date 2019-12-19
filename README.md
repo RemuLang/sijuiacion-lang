@@ -21,6 +21,31 @@ If you cannot read that, you're not a target user.
 
 There is no hack, but simple compiler stuffs.
 
+## A Backend for A Subset of Instructions
+
+Defined in `sij.rbnf`.
+
+```python
+from sijuiacion_lang.parser_wrap import parse
+from sijuiacion_lang.codegen import Codegen
+
+ast = parse("""
+runtime sys
+firstlineno 5
+const #lambda x: x + 1#
+const #2#
+call 1
+print
+const #None#
+return
+""")
+
+cg = Codegen()
+code = cg.start(ast)
+exec(code)
+```
+
+## Python APIs
 
 ```python
 from sijuiacion_lang.lowering import *

@@ -1319,7 +1319,7 @@ def mk_parser():
                 prim__tokens.offset = (_py_local_i + 1)
                 lcl_2 = _py_local_t
                 _slot_0 = lcl_2
-                lcl_2 = 32
+                lcl_2 = 31
                 try:
                     _py_local_tk = prim__tokens.array[prim__tokens.offset]
                     if (_py_local_tk.idint is lcl_2):
@@ -1333,7 +1333,7 @@ def mk_parser():
                 lcl_2 = (_slot_1 is None)
                 if lcl_2:
                     lcl_3 = prim__tokens.offset
-                    lcl_3 = (lcl_3, 'ID not match')
+                    lcl_3 = (lcl_3, 'INT not match')
                     lcl_3 = prim__cons(lcl_3, prim__nil)
                     lcl_3 = lcl_3
                     lcl_3 = (False, lcl_3)
