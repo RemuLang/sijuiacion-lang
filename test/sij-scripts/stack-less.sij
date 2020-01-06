@@ -1,0 +1,113 @@
+runtime operator
+filename "switch.sij"
+firstlineno 3
+
+defun
+    args [cont]
+    {
+        line 8
+        load cont
+        const #1#
+        prj
+        store x
+
+        load cont
+        const #0#
+        prj
+
+        dup 1
+
+        goto-if-not entry
+        indir
+        label entry
+
+        blockaddr point1
+        line 24
+        const #add#
+        const #1#
+
+        load x
+        call 2
+        tuple 2
+        goto ret
+        label point1
+
+        blockaddr point2
+        const #add#
+        const #1#
+        load x
+        call 2
+        tuple 2
+        goto ret
+        label point2
+
+        blockaddr point3
+        const #add#
+        const #1#
+        load x
+        call 2
+        tuple 2
+        goto ret
+        label point3
+
+        const #None#
+
+        label ret
+        return
+}
+
+store generator
+
+defun args [cont genfunc consume] {
+    load genfunc
+    load cont
+
+    dup 1
+    const #1#
+    prj
+    load consume
+    rot 2
+    call 1
+    pop
+
+    call 1
+    return
+}
+
+store next
+
+const #0#
+const #1#
+tuple 2
+store cont
+
+load next
+load cont
+load generator
+const #print#
+call 3
+store cont
+
+load next
+load cont
+load generator
+const #print#
+call 3
+store cont
+
+load next
+load cont
+load generator
+const #print#
+call 3
+store cont
+
+load next
+load cont
+load generator
+const #print#
+call 3
+print
+
+const #None#
+return

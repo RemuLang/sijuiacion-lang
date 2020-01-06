@@ -1,0 +1,34 @@
+runtime operator
+filename "switch.sij"
+firstlineno 3
+
+defun
+    args [x]
+    {
+        label a
+        load x
+
+        goto-if b
+        const #"didn't jump"#
+        print
+        goto c
+
+        label b
+
+        print
+
+        label c
+        const #None#
+        return
+    }
+store x
+load x
+const #False#
+call 1
+pop
+
+load x
+const #True#
+call 1
+return
+

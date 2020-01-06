@@ -18,6 +18,7 @@ def _code_template():
         co_consts = code.co_consts
         for eval_str, index in info[0].items():
             co_consts[index].append(eval(eval_str, runtime))
+
         for index, nest_info in info[1]:
             nest(co_consts[index], nest_info)
 

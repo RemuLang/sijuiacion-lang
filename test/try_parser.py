@@ -25,20 +25,27 @@ cg = Codegen()
 
 src = """
 runtime operator
-firstlineno 5
+filename "nested-functions.sij"
+firstlineno 3
+
+
 defun
-  args [x]
-  {
-  const #add#
-  const #1#
-  load x
-  call 2
-  return
-}
-const #8#
-call 1
+    {
+        const #1#
+        store x
+        defun
+            free [x]{
+                deref x
+                return
+            }
+        call 0
+        return
+    }
+
+call 0
 print
-const #None#
+
+const #0#
 return
 """
 

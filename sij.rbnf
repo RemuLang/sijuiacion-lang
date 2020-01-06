@@ -13,17 +13,22 @@ Instr : 'load'   <ID>
       | 'deref'  <ID>
       | 'deref!' <ID>
       | 'const'  <PY>
+
+      | 'print'
       | 'pop'
       | 'prj'
       | 'prj!'
+      | 'indir'
+
       | 'rot'    <INT>
       | 'dup'    <INT>
       | 'goto'   <ID>
-      | 'goto-if' <ID>
+      | 'goto-if'     <ID>
       | 'goto-if-not' <ID>
       | 'label'       <ID>
+      | 'blockaddr'   <ID>
+
       | 'call'        <INT>
-      | 'print'
       | 'list'        <INT>
       | 'tuple'       <INT>
       | 'return'

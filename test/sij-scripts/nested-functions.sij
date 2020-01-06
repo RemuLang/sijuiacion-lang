@@ -1,0 +1,26 @@
+runtime operator
+filename "nested-functions.sij"
+firstlineno 3
+
+defun
+    name "he"
+    {
+        const #1#
+        deref! x
+
+        defun
+            name "yo"
+            free [x]{
+                deref x
+                return
+            }
+        call 0
+        return
+    }
+
+call 0
+print
+
+const #0#
+return
+

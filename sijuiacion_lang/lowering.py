@@ -8,10 +8,9 @@ from sijuiacion_lang import bytecode_instrs as I
 from sijuiacion_lang import preserved_registers as PR
 from sijuiacion_lang import sijuiacion as sij
 from marshal import dumps as m_dumps
-from dataclasses import dataclass
-import typing as t
 from types import ModuleType
 import bytecode as bytec
+import typing as t
 import sys
 
 PY38 = sys.version_info >= (3, 8)
@@ -39,17 +38,17 @@ class Lower:
     def new_unmarshal_object(self):
         return UnmarshalObject()
 
-    def lower(self, name, filename, lineno, doc, args, instrs: t.List[sij.Instr]):
+    def lower(self, name, filename, lineno, doc, args, frees: t.List[str], instrs: t.List[sij.Instr]):
         """
         Before Python 3.8, indirect jumps via END_FINALLY
         should be wrapped in a SETUP_LOOP block
-        do some
         """
         indir_targets = find_indir_targets(instrs)
         _line = lineno
         BytecodeInstrType = bytec.Instr
         const_pool = {}
         loc_maps = []
+        inner_frees = set()
 
         def set_lineno(instr):
             if isinstance(instr, BytecodeInstrType):
@@ -80,18 +79,19 @@ class Lower:
                             val_o = eval(val, self.env.__dict__)
                             try:
                                 m_dumps(val_o)
-                                contained = const_pool[val] = True, val_o
+                                contained = const_pool[val] = False, val_o
                             except ValueError:
                                 val_o = []
-                                contained = const_pool[val] = False, val_o
+                                contained = const_pool[val] = True, val_o
+                        is_unmarshal_obj, val_o = contained
                         yield I.LOAD_CONST(val_o)
-                        is_unmarshal_obj = contained[0]
-                        if not is_unmarshal_obj:
+                        if is_unmarshal_obj:
                             yield I.LOAD_CONST(0)
                             yield I.BINARY(sij.BinOp.SUBSCR)
 
                     if sij.Pop():
                         yield I.POP_TOP()
+
                     if sij.ROT(n):
                         assert n in (2, 3), NotImplementedError
                         if n is 2:
@@ -168,14 +168,15 @@ class Lower:
                         yield I.LIST_APPEND(n)
                     if sij.Return():
                         yield I.RETURN_VALUE()
-                    if sij.Defun(doc, filename_, free, name, args, suite):
+                    if sij.Defun(doc, filename_, frees, name, args, suite):
                         co_filename = filename_ or filename
-                        has_free = bool(free)
+                        has_free = bool(frees)
                         if has_free:
-                            for freevar in free:
+                            for freevar in frees:
                                 yield I.LOAD_CLOSURE(freevar)
-                            yield I.BUILD_TUPLE(len(free))
-                        code, loc_map = self.lower(name, co_filename, _line, doc, args, suite)
+                            yield I.BUILD_TUPLE(len(frees))
+                        code, loc_map = self.lower(name, co_filename, _line, doc, args, frees, suite)
+                        inner_frees.update(code.co_freevars)
                         loc_maps.append((code, loc_map))
                         yield I.LOAD_CONST(code)
                         yield I.LOAD_CONST(name)
@@ -186,31 +187,32 @@ class Lower:
         code.filename = filename
         code.first_lineno = lineno
         code.docstring = doc
+        code.name = name
         code.argcount = len(args)
-        freevars = set()
         cellvars = set()
         for each in code:
             if not isinstance(each, bytec.Instr):
                 continue
+
             if not isinstance(each.arg, bytec.FreeVar):
                 continue
-            ext_name = each.arg.name
-            if ext_name in code.argnames:
-                cellvars.add(ext_name)
-                each.arg = bytec.CellVar(ext_name)
-            else:
-                freevars.add(ext_name)
 
-        code.freevars = list(freevars)
+            varname = each.arg.name
+            if varname not in frees:
+                each.arg = bytec.CellVar(varname)
+                cellvars.add(varname)
+
+        code.freevars = frees
         code.cellvars = list(cellvars)
         stacksize = code.compute_stacksize()
         ccode = resolve_blockaddr(code)
-        pycode = ccode.to_code(stacksize)
 
+        ccode.flags = bytec.flags.infer_flags(ccode)
+        pycode = ccode.to_code(stacksize)
         unmarshall_objs = {}
         consts = pycode.co_consts
-        for val_str, (is_marshal_able, val_o) in const_pool.items():
-            if not is_marshal_able:
+        for val_str, (is_unmarshal_obj, val_o) in const_pool.items():
+            if is_unmarshal_obj:
                 unmarshall_objs[val_str] = consts.index(val_o)
 
         nested_unmarshal_info = []

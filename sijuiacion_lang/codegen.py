@@ -15,7 +15,6 @@ Token.__match__ = match_token
 
 
 class Codegen:
-
     def __init__(self):
         self.ID_t = lexicals['ID']
         self.PY_t = lexicals['PY']
@@ -53,14 +52,15 @@ class Codegen:
                     if "lineno":
                         lineno = int(attrvalue)
                     if _:
-                        raise TypeError("invalid attribute {}".format(attrname))
+                        raise TypeError(
+                            "invalid attribute {}".format(attrname))
         instrs = self.instrs(instrs)
-        return self.lower(name, filename, lineno, doc, args, instrs)
+        return self.lower(name, filename, lineno, doc, args, [], instrs)
 
     def instrs(self, n: AST):
         assert n.tag == "Instrs"
         with match(n.contents):
-            if (hd,):
+            if (hd, ):
                 return [self.instr(hd)]
             if (init, end):
                 res = self.instrs(init)
@@ -85,7 +85,7 @@ class Codegen:
 
     def attrs(self, n):
         with match(n.contents):
-            if (hd,):
+            if (hd, ):
                 yield self.attr(hd)
             if (init, end):
                 yield from self.attrs(init)
@@ -100,13 +100,14 @@ class Codegen:
 
     def idlist(self, n):
         with match(n.contents):
-            if (hd,):
+            if (hd, ):
                 return [hd.value]
             if (init, end):
                 res = self.idlist(init)
-                res.append(hd.value)
+                res.append(end.value)
                 return res
 
+    # noinspection PyUnreachableCode
     def instr(self, n: AST):
         assert n.tag == "Instr"
         elts = n.contents
@@ -114,29 +115,39 @@ class Codegen:
             if (Token(instrname), isinstance(Token) and tk):
                 if tk.idint == self.ID_t:
                     return {
-                        'load': sij.Load, 'store': sij.Store, 'deref': sij.Deref, 'deref!': sij.RefSet,
-                        'goto': sij.Goto, 'goto-if': sij.GotoEq, 'goto-if-not': sij.GotoNEq, 'label': sij.Label
+                        'load': sij.Load,
+                        'store': sij.Store,
+                        'deref': sij.Deref,
+                        'deref!': sij.RefSet,
+                        'goto': sij.Goto,
+                        'goto-if': sij.GotoEq,
+                        'goto-if-not': sij.GotoNEq,
+                        'label': sij.Label,
+                        "blockaddr": sij.BlockAddr
                     }[instrname](tk.value)
                 if tk.idint == self.PY_t:
                     assert instrname == "const"
                     return sij.Const(tk.value[1:-1])
                 if tk.idint == self.INT_t:
                     return {
-                        'rot': sij.ROT, 'dup': sij.DUP, 'list': sij.BuildList, 'tuple': sij.BuildTuple,
-                        'line': sij.Line, 'call': sij.Call
+                        'rot': sij.ROT,
+                        'dup': sij.DUP,
+                        'list': sij.BuildList,
+                        'tuple': sij.BuildTuple,
+                        'line': sij.Line,
+                        'call': sij.Call
                     }[instrname](int(tk.value))
                 if _:
                     raise TypeError("invalid instruction {}".format(instrname))
-            if (Token("prj"),):
-                return sij.Item()
-            if (Token("prj!"),):
-                return sij.ItemSet()
-            if (Token("pop"),):
-                return sij.Pop()
-            if (Token("print"),):
-                return sij.Print()
-            if (Token("return"),):
-                return sij.Return()
+            if (Token(single_instr), ):
+                return {
+                    "prj": sij.Item,
+                    "prj!": sij.ItemSet,
+                    "pop": sij.Pop,
+                    "print": sij.Print,
+                    "return": sij.Return,
+                    "indir": sij.Indir
+                }[single_instr]()
             if (Token("defun"), *xs):
                 doc = ""
                 filename = ""
@@ -145,7 +156,8 @@ class Codegen:
                 args = []
                 with match(xs):
                     if (_, instrs, _):
-                        return sij.Defun(doc, filename, free, name, args, self.instrs(instrs))
+                        return sij.Defun(doc, filename, free, name, args,
+                                         self.instrs(instrs))
                     if (attrs, _, instrs, _):
                         instrs = self.instrs(instrs)
                         for attrname, attrvalue in self.attrs(attrs):
@@ -163,7 +175,11 @@ class Codegen:
                                 if "lineno":
                                     instrs = [sij.Line(attrvalue), *instrs]
                                 if _:
-                                    raise TypeError("invalid attribute {}".format(attrname))
-                        return sij.Defun(doc, filename, free, name, args, instrs)
+                                    raise TypeError(
+                                        "invalid attribute {}".format(
+                                            attrname))
+                        return sij.Defun(doc, filename, free, name, args,
+                                         instrs)
                     if _:
-                        raise TypeError("invalid args for defun, seems impossible")
+                        raise TypeError(
+                            "invalid args for defun, seems impossible")
