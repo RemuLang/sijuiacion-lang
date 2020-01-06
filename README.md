@@ -25,17 +25,21 @@ pip install . --no-compile
 ```
 > cat x.sij
 
-    runtime sys
-    filename "x.sij"
-    firstlineno 3
-    const #1#
-    print
-    const #2#
-    return
+runtime operator
+filename "x.sij"
+firstlineno 3
+const #add#
+const #"hello "#
+const #"sij"#
+call 2
+print
+const #None#
+return
 
-> sij xxx.sij
-1 
-2
+> sij run xxx.sij
+hello sij
+> sij cc xxx.sij xxx.pyc && python xxx.pyc
+hello sij
 ```
 
 # Preview
@@ -55,8 +59,9 @@ Defined in `sij.rbnf`.
 ```python
 from sijuiacion_lang.parser_wrap import parse
 from sijuiacion_lang.codegen import Codegen
+from sijuiacion_lang.interface import load_sij
 
-ast = parse("""
+source = """
 runtime sys
 firstlineno 5
 const #lambda x: x + 1#
@@ -65,13 +70,13 @@ call 1
 print
 const #None#
 return
-""")
+"""
 
-cg = Codegen()
-code = cg.start(ast)
+code = load_sij(source)
 exec(code)
 # => 3
 ```
+
 
 ## Python APIs
 

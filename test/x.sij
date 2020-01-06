@@ -1,7 +1,10 @@
-runtime sys
+runtime operator
 filename "x.sij"
 firstlineno 3
-const #1#
+const #add#
+const #"hello "#
+const #"sij"#
+call 2
 print
-const #2#
+const #None#
 return
