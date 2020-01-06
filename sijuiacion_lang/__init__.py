@@ -1,1 +1,2 @@
+import sijuiacion_lang.bytecode_patch
 import moshmosh

@@ -11,9 +11,11 @@ Instrs : [Instrs] Instr;
 Instr : 'load'   <ID>
       | 'store'  <ID>
       | 'deref'  <ID>
-      | 'refset' <ID>
+      | 'deref!' <ID>
       | 'const'  <PY>
       | 'pop'
+      | 'prj'
+      | 'prj!'
       | 'rot'    <INT>
       | 'dup'    <INT>
       | 'goto'   <ID>

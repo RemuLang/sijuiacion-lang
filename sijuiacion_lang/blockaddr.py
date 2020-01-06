@@ -2,6 +2,7 @@ import typing as t
 import bytecode
 from bytecode import Instr, Bytecode, Label, ConcreteBytecode, ConcreteInstr
 from dataclasses import dataclass
+
 WHY_CONTINUE = 0x0020
 
 
@@ -9,13 +10,16 @@ WHY_CONTINUE = 0x0020
 class NamedLabel(Label):
     name: str
 
+
 @dataclass(order=True, frozen=True)
 class LabelValue:
     name: str
 
+
 @dataclass(order=True, frozen=True)
 class LabelValueMap:
     map: t.Dict[int, str]
+
 
 class BlockNotFoundError(Exception):
     pass
@@ -26,6 +30,7 @@ def label_to_offset(labels, label_name):
     if label_offset is None:
         raise BlockNotFoundError(label_name)
     return label_offset * 2
+
 
 def resolve_blockaddr(bc: Bytecode):
     converter = bytecode._ConvertBytecodeToConcrete(bc)
