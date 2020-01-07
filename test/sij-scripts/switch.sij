@@ -1,0 +1,42 @@
+runtime operator
+filename "switch.sij"
+firstlineno 3
+
+defun
+    args [x]
+    {
+        load x
+        switch
+            | 1 => a
+            | 2 => b
+            | _ => c
+
+        label a
+        const #"switch a"#
+        print
+        goto end
+
+        label b
+        const #"switch b"#
+        print
+        goto end
+
+        label c
+        const #"switch c"#
+        print
+        goto end
+
+        label end
+        const #None#
+        return
+    }
+dup 1
+
+const #2#
+call 1
+pop
+
+const #3#
+call 1
+
+return

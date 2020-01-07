@@ -130,9 +130,22 @@ class Lower:
                         yield I.LOAD_CONST(WHY_CONTINUE)
                         yield I.INDIR()
                     if sij.Switch(table):
-                        yield I.LOAD_CONST(LabelValueMap(table))
-                        yield I.ROT2()
-                        yield I.BINARY(sij.BinOp.SUBSCR)
+                        if None not in table:
+                            yield I.LOAD_CONST(LabelValueMap(table))
+                            yield I.ROT2()
+                            yield I.BINARY(sij.BinOp.SUBSCR)
+                        else:
+                            # has default branch
+                            val_o = []
+                            const_pool['dict.get'] = True, val_o
+                            yield I.LOAD_CONST(val_o)
+                            yield I.LOAD_CONST(0)
+                            yield I.BINARY(sij.BinOp.SUBSCR)
+                            yield I.ROT2()
+                            yield I.LOAD_CONST(LabelValueMap(table))
+                            yield I.ROT2()
+                            yield I.LOAD_CONST(LabelValue(table[None]))
+                            yield I.CALL_FUNCTION(3)
                         if not PY38:
                             yield I.PUSH_BLOCK(i)
                             yield NamedLabel(i)

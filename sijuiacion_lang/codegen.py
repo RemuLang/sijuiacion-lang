@@ -2,6 +2,7 @@
 # +pattern-matching
 from typing import Optional
 from rbnf_rts.token import Token
+from rbnf_rts.routine import LRCommaList
 from rbnf_rts.rts import AST
 from sijuiacion_lang.lowering import sij, Lower
 from sijuiacion_lang.parser import lexicals
@@ -14,6 +15,7 @@ def match_token(_, to_match):
 Token.__match__ = match_token
 
 
+# noinspection PyUnreachableCode,PyArgumentList
 class Codegen:
     def __init__(self):
         self.ID_t = lexicals['ID']
@@ -107,6 +109,14 @@ class Codegen:
                 res.append(end.value)
                 return res
 
+    def jump_cases(self, n):
+        for each in LRCommaList(n):
+            [i, _, s] = each.contents
+            if self.INT_t is i.idint:
+                yield int(i.value), s.value
+            else:
+                yield None, s.value
+
     # noinspection PyUnreachableCode
     def instr(self, n: AST):
         assert n.tag == "Instr"
@@ -148,6 +158,11 @@ class Codegen:
                     "return": sij.Return,
                     "indir": sij.Indir
                 }[single_instr]()
+
+            if (Token("switch"), *args):
+                table = dict(self.jump_cases(args[-1]))
+                return sij.Switch(table)
+
             if (Token("defun"), *xs):
                 doc = ""
                 filename = ""

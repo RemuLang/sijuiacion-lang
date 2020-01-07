@@ -5,7 +5,7 @@ firstlineno 3
 defun
     name "he"
     {
-        const #1#
+        const #"Heyo"#
         deref! x
 
         defun

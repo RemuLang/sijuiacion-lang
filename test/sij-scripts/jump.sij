@@ -9,12 +9,12 @@ defun
         load x
 
         goto-if b
-        const #"didn't jump"#
+        const #"didn't jump!"#
         print
         goto c
 
         label b
-
+        const #"jumped!"#
         print
 
         label c

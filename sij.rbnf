@@ -34,8 +34,13 @@ Instr : 'load'   <ID>
       | 'return'
       | 'line'        <INT>
       | 'defun' [Attrs] '{' Instrs '}'
+      | 'switch' ['|'] JumpCases
      ;
 
+JumpCase : <INT> '=>' <ID>;
+JumpCase : '_' '=>' <ID>;
+
+JumpCases : [JumpCases '|'] JumpCase;
 
 Attrs : [Attrs] Attr;
 
