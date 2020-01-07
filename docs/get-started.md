@@ -37,7 +37,7 @@ Create a file called `hw.sij`, filling
 
 ```sijuiacion
 runtime operator
-filename "switch.sij"
+filename "hw.sij"
 firstlineno 3
 
 const #add#
@@ -64,7 +64,7 @@ Local variables can be manipulated by `load` and `store` instructions.
 
 ```sijuiacion
 runtime operator
-filename "switch.sij"
+filename "var.sij"
 firstlineno 3
 
 const #add#
@@ -85,7 +85,7 @@ produces
 
 ```sijuiacion
 runtime operator
-filename "switch.sij"
+filename "function.sij"
 firstlineno 3
 
 defun
@@ -131,7 +131,7 @@ Besides, accessing or mutating the free/cells variables requires the instruction
 
 ```sijuiacion
 runtime operator
-filename "switch.sij"
+filename "closure.sij"
 firstlineno 3
 
 const #1#
