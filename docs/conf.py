@@ -136,7 +136,7 @@ html_title = "Sij Documentation"
 
 html_theme_options = {
     # Navigation bar title. (Default: ``project`` value)
-    'navbar_site_name': f"{project}",
+    'navbar_site_name': "Documentation",
     'navbar_title': f"{project}",
 
     # Tab name for entire site. (Default: "Site")
@@ -202,8 +202,13 @@ html_theme_options = {
 }
 htmlhelp_basename = 'sij_'
 
-html_favicon = './favicon.ico'
+# html_favicon = './favicon.ico'
 
 latex_documents = [
     (master_doc, f'{project}.tex', f'{project}', 'thautwarm', 'manual'),
 ]
+
+html_sidebars = {
+    '**': [
+    ]
+}

@@ -26,29 +26,28 @@ cg = Codegen()
 # assert eval(code) == 3
 
 src = """
-runtime operator
-filename "switch.sij"
+runtime numpy     
+filename "play-with-numpy.sij"
 firstlineno 3
 
-const #1#
-deref! y
+const #10#
+switch
+  | 10 => a
+  | _  => b
 
-defun
-    free [y]
-    args [x]
-    {
-        line 7
-
-        load x
-        deref y
-        tuple 2
-        return 
-    }
-const #mul#
-call 1
+label a
+const #"jump to a"#
 print
+goto end
 
-const #None#
+label b
+const #"jump to b"#
+print
+goto end
+
+label end
+
+const #10#
 return
 """
 
