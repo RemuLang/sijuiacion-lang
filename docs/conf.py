@@ -18,7 +18,6 @@
 from pygments.lexer import RegexLexer
 from pygments import token
 from sphinx.highlighting import lexers
-from sijuiacion_lang.parser import lexicals
 from re import escape
 
 keywords = [
