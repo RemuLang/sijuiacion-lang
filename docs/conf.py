@@ -21,18 +21,26 @@ from sphinx.highlighting import lexers
 from sijuiacion_lang.parser import lexicals
 from re import escape
 
+keywords = [
+    'runtime', 'load', 'store', 'deref', 'deref!', 'const', 'print', 'pop',
+    'prj', 'prj!', 'indir', 'rot', 'dup', 'goto', 'goto-if', 'goto-if-not',
+    'label', 'blockaddr', 'call', 'list', 'tuple', 'return', 'line', 'defun',
+     'switch', 'document', 'filename', 'free', 'name',
+    'args', 'firstlineno'
+]
+operators = ['{', '}', '|', '=>', '_', '[', ']']
+
 
 class SijLexer(RegexLexer):
     name = 'sijuiacion'
 
     tokens = {
         'root': [
-            *[(escape(k[len("quote "):]), token.Keyword)
-              for k in lexicals if k.startswith("quote ")],
-            (r"#([^\\#]+|\\.)*?#", token.Literal),
-            (r"\d+", token.Number),
-            (r"[-$\.a-zA-Z_\u4e00-\u9fa5][\-\!-$\.a-zA-Z0-9_\u4e00-\u9fa5]*", token.Name),
-            (r'''"([^\\"]+|\\.)*?"''', token.String),
+            *[(escape(k), token.Keyword) for k in keywords],
+            *[(escape(o),token.Operator) for o in operators],
+            (r"#([^\\#]+|\\.)*?#", token.Literal), (r"\d+", token.Number),
+            (r"[-$\.a-zA-Z_\u4e00-\u9fa5][\-\!-$\.a-zA-Z0-9_\u4e00-\u9fa5]*",
+             token.Name), (r'''"([^\\"]+|\\.)*?"''', token.String),
             (r'\s+', token.Whitespace)
         ]
     }
