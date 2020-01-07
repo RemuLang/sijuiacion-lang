@@ -1,5 +1,9 @@
+
 # sijuiacion-lang
 
+[![Documentation Status](https://readthedocs.org/projects/sijuiacion-lang/badge/?version=latest)](https://sijuiacion-lang.readthedocs.io/en/latest/?badge=latest)
+      
+      
 Sijuiacion, a.k.a "橘势", is a programming language to achieve a better use of
 a subset of of the CPython bytecode instructions.
 
