@@ -35,8 +35,6 @@ class Lower:
     def __init__(self, env=None):
         self.env = env or ModuleType("<faker>")
 
-    def new_unmarshal_object(self):
-        return UnmarshalObject()
 
     def lower(self, name, filename, lineno, doc, args, frees: t.List[str], instrs: t.List[sij.Instr]):
         """
@@ -81,7 +79,7 @@ class Lower:
                                 m_dumps(val_o)
                                 contained = const_pool[val] = False, val_o
                             except ValueError:
-                                val_o = []
+                                val_o = [UnmarshalObject()]
                                 contained = const_pool[val] = True, val_o
                         is_unmarshal_obj, val_o = contained
                         yield I.LOAD_CONST(val_o)
@@ -136,7 +134,7 @@ class Lower:
                             yield I.BINARY(sij.BinOp.SUBSCR)
                         else:
                             # has default branch
-                            val_o = []
+                            val_o = [UnmarshalObject()]
                             const_pool['dict.get'] = True, val_o
                             yield I.LOAD_CONST(val_o)
                             yield I.LOAD_CONST(0)
@@ -203,6 +201,7 @@ class Lower:
         code.name = name
         code.argcount = len(args)
         cellvars = set()
+
         for each in code:
             if not isinstance(each, bytec.Instr):
                 continue
@@ -211,8 +210,13 @@ class Lower:
                 continue
 
             varname = each.arg.name
+
             if varname not in frees:
                 each.arg = bytec.CellVar(varname)
+                cellvars.add(varname)
+
+        for varname in code.argnames:
+            if varname in frees:
                 cellvars.add(varname)
 
         code.freevars = frees
@@ -227,6 +231,7 @@ class Lower:
         for val_str, (is_unmarshal_obj, val_o) in const_pool.items():
             if is_unmarshal_obj:
                 unmarshall_objs[val_str] = consts.index(val_o)
+                val_o.pop()
 
         nested_unmarshal_info = []
         for code, loc_map in loc_maps:

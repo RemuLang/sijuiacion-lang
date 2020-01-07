@@ -4,6 +4,8 @@ Created on Thu Dec 19 19:45:39 2019
 
 @author: twshe
 """
+import dis
+
 from sijuiacion_lang.parser_wrap import parse
 from sijuiacion_lang.codegen import Codegen
 from sijuiacion_lang.interface import load_sij
@@ -25,30 +27,32 @@ cg = Codegen()
 
 src = """
 runtime operator
-filename "nested-functions.sij"
+filename "switch.sij"
 firstlineno 3
 
+const #1#
+deref! y
 
 defun
+    free [y]
+    args [x]
     {
-        const #1#
-        store x
-        defun
-            free [x]{
-                deref x
-                return
-            }
-        call 0
-        return
-    }
+        line 7
 
-call 0
+        load x
+        deref y
+        tuple 2
+        return 
+    }
+const #mul#
+call 1
 print
 
-const #0#
+const #None#
 return
 """
 
 mk = load_sij(src)
+# dis.dis(mk.co_consts[2][0])
 dumps(mk)
 exec(mk)
