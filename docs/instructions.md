@@ -165,7 +165,7 @@ base[key] = value
 
 ### `indir`
 
-This is one of the advanced feature in sijuiacion comparing to the ordinary Python instruction. 
+This is one of the advanced features in sijuiacion comparing to the ordinary Python instruction. 
 
 It consumes the TOS, and jump to the corresponding offset of current frame.
 
