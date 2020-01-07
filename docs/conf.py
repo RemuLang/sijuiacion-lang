@@ -41,7 +41,8 @@ class WurusaiStyle(Style):
         token.Operator: "#246C60",
         token.Number: "#779D34",
         token.Comment: "#AA6F39",
-        token.Punctuation: '#DE369D'
+        token.Punctuation: '#DE369D',
+        token.Literal: "#4671D5"
     }
 
 
