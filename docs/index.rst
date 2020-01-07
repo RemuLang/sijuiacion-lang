@@ -37,3 +37,7 @@ Features of sijuiacion:
 - Providing **Label as Values**, indirect jump, switch instructions for advanced language constructs.
 - Taking advantage of Python's error reporting mechanisms by providing metadata.
 - Generalising Python constants other than only marshallable python objects, by link time processing.
+
+
+There's an example for implementing the stackless coroutine in Python with sijuiacion: `stack-less.sij <https://github.com/RemuLang/sijuiacion-lang/blob/master/test/sij-scripts/stack-less.sij>`_ ,
+by using indirect jumps and Label As Value.
