@@ -80,7 +80,9 @@ In `#add#`, the expression `add` is evaluated in the global scope of module `ope
 
 ### Optional attributes
 
-All of [common-attributes](#Attributes) can be placed here, optional.
+Some of [these attributes](#Attributes) can be placed here, all optional.
+
+Attributes `free` and `args` are not allowed in the entry of the file.
 
 
 ## Instruction
@@ -227,5 +229,127 @@ point to the correct line number.
 
 P.S: Another important metadata attribute for runtime error reporting is `filename`.
 
+### `dup`
 
-### Documentation on going...
+Followed by an integer which means how many times to duplicate TOS.
+
+
+### `goto-if`
+
+Followed by the name of a label name, to which jump if `TOS` is true. TOS consumed.
+
+### `goto-if-not`
+
+Followed by the name of a label name, to which jump if `TOS` is false. TOS consumed.
+
+### `rot`
+
+Can only be followed by `2` or `3`, equivalent to Python instruction `ROT_TWO` or `ROT_THREE`, respectively.
+
+P.S: `ROT_FOUR` is added to Python instruction set, thus, this is going to get supported.
+
+### `list`
+
+Followed by an integer, hereafter as `N`, then build a Python list by consuming the top `N` elements.
+
+We use python code to demonstrate the semantics of `list 2`:
+
+```python
+elt2 = stack.pop()
+elt1 = stack.pop()
+stack.append([elt1, elt2])
+```
+
+### `tuple`
+
+Similar to `list` but build a tuple.
+
+### `switch`
+
+For instance,
+```sijuiacion
+switch
+| 1 => a
+| _ => b
+```
+You can read it as "take TOS(consumed), if TOS equals to 1, jump to label a; otherwise, jump to label b".
+
+`_ => b` is a default case.
+
+P.S:
+
+1. Holding multiple cases is allowed, and no default case is permitted.
+2. The first `|` can be omitted.
+
+
+### `defun`
+
+Define a function and place it as TOS.
+
+Firstly, followed by a series of [attributes](#Attributes), where all of those kinds of attributes are allowed here.
+
+Then, followed by a series of instructions enclosed by `{` and `}`.
+
+For instance,
+
+```sijuiacion
+defun {
+    const #0#
+    return
+}
+call 0
+
+defun args [x] {
+    load x
+    return x
+}
+const #1#
+call 1
+
+const #2#
+deref! a
+defun free [a] {
+    deref a
+    return
+}
+call 0
+
+tuple 3
+print
+```
+
+produces `(0, 1, 2)`.
+
+## Attributes
+
+### `document`
+
+Followed by a double-quoted string, representing the documentation of the code object.
+
+### `filename`
+
+Followed by a double-quoted string, representing the definition filename of the code object.
+
+### `free`
+
+Followed by a non-separated list of identifiers, representing the free variables of the code object.
+
+**NOTE**: `defun` only, cannot be used in file entry.
+
+### `args`
+
+Followed by a non-separated list of identifiers, representing the arguments of the code object.
+
+For simplifying our language, only positional arguments are permitted.
+
+Further, you can create helper functions in Python side to access a fuller set of function call functionalities.
+
+**NOTE**: `defun` only, cannot be used in file entry.
+
+### `name`
+
+Followed by a double-quoted string, representing the name of the code object.
+
+### `firstlineno`
+
+Followed by a double-quoted string, representing the first line number of the code object.
