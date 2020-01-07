@@ -11,6 +11,7 @@ Welcome to sijuiacion-language's documentation!
    :caption: Contents:
 
    get-started.md
+   instructions.md
 
 
 

@@ -20,7 +20,7 @@ About the ecosystem, either embedding Python or being embedded in Python is natu
 
 ## Installation
 
-```
+```shell
 pip install -U moshmosh-base --no-compile
 git clone https://github.com/RemuLang/sijuiacion-lang
 cd sijuiacion-lang
@@ -51,7 +51,8 @@ return
 ```
 
 You're expected to get
-```
+```shell
+ushell> sij cc hw.sij hw.pyc && python hw.pyc # or `sij run hw.sij`
 'hello sijuiacion!'
 ```
 
@@ -126,7 +127,7 @@ but referenced by its inner scopes.
 Within sijuiacion, you just need to specify free variables when creating functions,
 by adding an attribute to the function definition: for example, `free [var1 var2 var3]`.
 
-Besides, accessing or mutating the free/cells variables requires the instruction `deref` or `deref`, respectively.
+Besides, accessing or mutating the free/cells variables requires the instruction `deref` or `deref!`, respectively.
 
 ```sijuiacion
 runtime operator

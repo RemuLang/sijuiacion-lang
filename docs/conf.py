@@ -15,19 +15,50 @@
 # sys.path.insert(0, os.path.abspath('.'))
 
 # -- Project information -----------------------------------------------------
+
+import sphinx_bootstrap_theme
 from pygments.lexer import RegexLexer
 from pygments import token
 from sphinx.highlighting import lexers
+from pygments.style import Style
 from re import escape
 
 keywords = [
     'runtime', 'load', 'store', 'deref', 'deref!', 'const', 'print', 'pop',
     'prj', 'prj!', 'indir', 'rot', 'dup', 'goto', 'goto-if', 'goto-if-not',
     'label', 'blockaddr', 'call', 'list', 'tuple', 'return', 'line', 'defun',
-     'switch', 'document', 'filename', 'free', 'name',
-    'args', 'firstlineno'
+    'switch', 'document', 'filename', 'free', 'name', 'args', 'firstlineno'
 ]
 operators = ['{', '}', '|', '=>', '_', '[', ']']
+
+
+class WurusaiStyle(Style):
+    background_color = "#FFFFAA"
+    styles = {
+        token.Text: "#AA3939",
+        token.String: "#479030",
+        token.Keyword: "#A600A6",
+        token.Operator: "#246C60",
+        token.Number: "#779D34",
+        token.Comment: "#AA6F39",
+        token.Punctuation: '#DE369D'
+    }
+
+
+def pygments_monkeypatch_style(mod_name, cls):
+    import sys
+    import pygments.styles
+    cls_name = cls.__name__
+    mod = type(__import__("os"))(mod_name)
+    setattr(mod, cls_name, cls)
+    setattr(pygments.styles, mod_name, mod)
+    sys.modules["pygments.styles." + mod_name] = mod
+    from pygments.styles import STYLE_MAP
+    STYLE_MAP[mod_name] = mod_name + "::" + cls_name
+
+
+pygments_monkeypatch_style("wurusai", WurusaiStyle)
+pygments_style = "wurusai"
 
 
 class SijLexer(RegexLexer):
@@ -36,7 +67,7 @@ class SijLexer(RegexLexer):
     tokens = {
         'root': [
             *[(escape(k), token.Keyword) for k in keywords],
-            *[(escape(o),token.Operator) for o in operators],
+            *[(escape(o), token.Operator) for o in operators],
             (r"#([^\\#]+|\\.)*?#", token.Literal), (r"\d+", token.Number),
             (r"[-$\.a-zA-Z_\u4e00-\u9fa5][\-\!-$\.a-zA-Z0-9_\u4e00-\u9fa5]*",
              token.Name), (r'''"([^\\"]+|\\.)*?"''', token.String),
@@ -45,9 +76,24 @@ class SijLexer(RegexLexer):
     }
 
 
-lexers[SijLexer.name] = SijLexer(startinline=True)
+class RBNFLexer(RegexLexer):
+    name = 'rbnf'
 
-import sphinx_bootstrap_theme
+    tokens = {
+        'root': [
+            *[(escape(o), token.Punctuation)
+              for o in ['->', '|', ';', ':', '=', '?']],
+            (r"#([^\\#]+|\\.)*?#", token.Comment),
+            (r"[-$\.a-zA-Z_\u4e00-\u9fa5][a-zA-Z0-9_\u4e00-\u9fa5]*",
+             token.Keyword), (r'''"([^\\"]+|\\.)*?"''', token.Operator),
+            (r"""'([^\\']+|\\.)*?'""", token.Operator),
+            (r'\<.*\>', token.Operator), (r'\s+', token.Whitespace)
+        ]
+    }
+
+
+lexers[SijLexer.name] = SijLexer(startinline=True)
+lexers[RBNFLexer.name] = RBNFLexer(startinline=True)
 
 extensions = ['sphinx.ext.mathjax', "recommonmark"]
 master_doc = 'index'
@@ -153,7 +199,6 @@ html_theme_options = {
     # Values: "3" (default) or "2" (in quotes)
     'bootstrap_version': "3",
 }
-pygments_style = 'perldoc'
 htmlhelp_basename = 'sij_'
 
 html_favicon = './favicon.ico'
