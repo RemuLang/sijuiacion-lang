@@ -48,8 +48,14 @@ def mk_parser():
             lcl_1 = lr_Attrs_try[0]
             lcl_1 = (lcl_1 is not False)
             lcl_0 = lcl_1
-        prim__tokens.offset = _off_0
-        return lr_Attrs_reduce
+        lcl_0 = prim__tokens.offset
+        lcl_0 = (lcl_0 is _off_0)
+        if lcl_0:
+            lcl_1 = (True, lr_Attrs_reduce)
+            lcl_0 = lcl_1
+        else:
+            lcl_0 = lr_Attrs_try
+        return lcl_0
 
     def lr_step_IDList(_slot_0, prim__state, prim__tokens):
         lcl_0 = 42
@@ -98,8 +104,14 @@ def mk_parser():
             lcl_1 = lr_IDList_try[0]
             lcl_1 = (lcl_1 is not False)
             lcl_0 = lcl_1
-        prim__tokens.offset = _off_0
-        return lr_IDList_reduce
+        lcl_0 = prim__tokens.offset
+        lcl_0 = (lcl_0 is _off_0)
+        if lcl_0:
+            lcl_1 = (True, lr_IDList_reduce)
+            lcl_0 = lcl_1
+        else:
+            lcl_0 = lr_IDList_try
+        return lcl_0
 
     def lr_step_Instrs(_slot_0, prim__state, prim__tokens):
         lcl_0 = parse_Instr(prim__state, prim__tokens)
@@ -138,8 +150,14 @@ def mk_parser():
             lcl_1 = lr_Instrs_try[0]
             lcl_1 = (lcl_1 is not False)
             lcl_0 = lcl_1
-        prim__tokens.offset = _off_0
-        return lr_Instrs_reduce
+        lcl_0 = prim__tokens.offset
+        lcl_0 = (lcl_0 is _off_0)
+        if lcl_0:
+            lcl_1 = (True, lr_Instrs_reduce)
+            lcl_0 = lcl_1
+        else:
+            lcl_0 = lr_Instrs_try
+        return lcl_0
 
     def lr_step_JumpCases(_slot_0, prim__state, prim__tokens):
         lcl_0 = 29
@@ -201,8 +219,14 @@ def mk_parser():
             lcl_1 = lr_JumpCases_try[0]
             lcl_1 = (lcl_1 is not False)
             lcl_0 = lcl_1
-        prim__tokens.offset = _off_0
-        return lr_JumpCases_reduce
+        lcl_0 = prim__tokens.offset
+        lcl_0 = (lcl_0 is _off_0)
+        if lcl_0:
+            lcl_1 = (True, lr_JumpCases_reduce)
+            lcl_0 = lcl_1
+        else:
+            lcl_0 = lr_JumpCases_try
+        return lcl_0
 
     def parse_Attr(prim__state, prim__tokens):
         lcl_0 = prim__tokens.offset
@@ -413,7 +437,6 @@ def mk_parser():
             lcl_1 = prim__mk__ast('Attrs', lcl_1)
             _slot_local__1 = lcl_1
             lcl_1 = lr_loop_Attrs(_slot_local__1, prim__state, prim__tokens)
-            lcl_1 = (True, lcl_1)
             lcl_0 = lcl_1
         return lcl_0
 
@@ -442,7 +465,6 @@ def mk_parser():
             lcl_1 = prim__mk__ast('IDList', lcl_1)
             _slot_local__1 = lcl_1
             lcl_1 = lr_loop_IDList(_slot_local__1, prim__state, prim__tokens)
-            lcl_1 = (True, lcl_1)
             lcl_0 = lcl_1
         return lcl_0
 
@@ -1724,7 +1746,6 @@ def mk_parser():
             lcl_1 = prim__mk__ast('Instrs', lcl_1)
             _slot_local__1 = lcl_1
             lcl_1 = lr_loop_Instrs(_slot_local__1, prim__state, prim__tokens)
-            lcl_1 = (True, lcl_1)
             lcl_0 = lcl_1
         return lcl_0
 
@@ -1871,7 +1892,6 @@ def mk_parser():
             lcl_1 = prim__mk__ast('JumpCases', lcl_1)
             _slot_local__1 = lcl_1
             lcl_1 = lr_loop_JumpCases(_slot_local__1, prim__state, prim__tokens)
-            lcl_1 = (True, lcl_1)
             lcl_0 = lcl_1
         return lcl_0
 

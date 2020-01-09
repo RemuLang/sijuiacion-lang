@@ -6,7 +6,7 @@ with Path('README.md').open(encoding='utf8') as readme:
 
 setup(
     name='sijuiacion-lang',
-    version="0.1",
+    version="0.1.1",
     keywords="",  # keywords of your project that separated by comma ","
     description="",  # a conceise introduction of your project
     long_description=readme,
