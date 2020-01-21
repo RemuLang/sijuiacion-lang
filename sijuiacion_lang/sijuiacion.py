@@ -88,6 +88,12 @@ class Extern(Instr):
 
 @adt_recog
 @dataclass(frozen=True, order=True)
+class SimpleRaise(Instr):
+    pass
+
+
+@adt_recog
+@dataclass(frozen=True, order=True)
 class Pop(Instr):
     pass
 

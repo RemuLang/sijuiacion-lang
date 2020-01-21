@@ -70,6 +70,10 @@ code, _ = lowerer.lower("name", "fname", 1, "no doc", ["x"], [], [
     sij.Extern("114514"),
     sij.Print(),
     sij.Label("d"),
+    # sij.Glob("Exception"),
+    # sij.Const("haha"),
+    # sij.Call(1),
+    sij.SimpleRaise(),
     sij.Const(None),
     sij.Return()
 ])

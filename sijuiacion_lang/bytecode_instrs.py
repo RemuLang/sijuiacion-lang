@@ -14,6 +14,9 @@ def LOAD_FAST(n):
 def LOAD_GLOBAL(n):
     return Instr(instr_names.LOAD_GLOBAL, n)
 
+def RAISE_VARARGS(i):
+    return Instr(instr_names.RAISE_VARARGS, i)
+
 def LOAD_DEREF(n):
     # will resolve free/cell var later
     return Instr(instr_names.LOAD_DEREF, FreeVar(n))

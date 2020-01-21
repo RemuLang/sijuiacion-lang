@@ -73,6 +73,8 @@ class Lower:
                         yield I.LOAD_DEREF(name)
                     if sij.RefSet(name):
                         yield I.STORE_DEREF(name)
+                    if sij.SimpleRaise():
+                        yield I.RAISE_VARARGS(1)
                     if sij.Const(val):
                         yield I.LOAD_CONST(val)
                     if sij.Extern(val):
