@@ -74,6 +74,13 @@ class Glob(Instr):
 
 @adt_recog
 @dataclass(frozen=True, order=True)
+class GlobSet(Instr):
+    name:str
+    pass
+
+
+@adt_recog
+@dataclass(frozen=True, order=True)
 class Const(Instr):
     val:object
     pass

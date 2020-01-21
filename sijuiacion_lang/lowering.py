@@ -12,6 +12,7 @@ import typing as t
 import sys
 PY38 = sys.version_info >= (3, 8)
 
+
 def find_indir_targets(instrs):
     ret = set()
     for instr in instrs:
@@ -21,16 +22,18 @@ def find_indir_targets(instrs):
             ret.update(instr.table.values())
     return ret
 
+
 class UnmarshalObject:
     __slots__ = []
     pass
+
 
 class Lower:
     def __init__(self, env=None):
         self.env = env or ModuleType("<faker>")
 
-
-    def lower(self, name, filename, lineno, doc, args, frees: t.List[str], instrs: t.List[sij.Instr]):
+    def lower(self, name, filename, lineno, doc, args, frees: t.List[str],
+              instrs: t.List[sij.Instr]):
         """
         Before Python 3.8, indirect jumps via END_FINALLY
         should be wrapped in a SETUP_LOOP block
@@ -54,12 +57,20 @@ class Lower:
                 yield I.STORE_FAST(PR.REG_TEST_INDIR_JUMPED)
             for i, instr in enumerate(instrs):
                 i = i + 1
-                if isinstance(no, sij.Line):
-                     _line = no
-                     continue
+                if isinstance(instr, sij.Line):
+                    _line = instr.no
+                    continue
+                if isinstance(instr, sij.Pop):
+                    yield I.POP_TOP()
+                    continue
+
                 with match(instr):
+                    if sij.Cmp(op):
+                        yield I.COMPARE_OP(op)
                     if sij.Glob(name):
                         yield I.LOAD_GLOBAL(name)
+                    if sij.GlobSet(name):
+                        yield I.STORE_GLOBAL(name)
                     if sij.Load(name):
                         yield I.LOAD_FAST(name)
                     if sij.Store(name):
@@ -89,9 +100,6 @@ class Lower:
                         if is_unmarshal_obj:
                             yield I.LOAD_CONST(0)
                             yield I.BINARY(sij.BinOp.SUBSCR)
-
-                    if sij.Pop():
-                        yield I.POP_TOP()
 
                     if sij.ROT(n):
                         assert n in (2, 3), NotImplementedError
@@ -160,8 +168,6 @@ class Lower:
                         yield I.INPLACE_BINARY(bin_op)
                     if sij.Un(uop):
                         yield I.UNARY(uop)
-                    if isinstance(sij.Compare):
-                        yield instr.op
                     if sij.Attr(attr):
                         yield I.LOAD_ATTR(attr)
                     if sij.AttrSet(attr):
@@ -189,7 +195,8 @@ class Lower:
                             for freevar in frees:
                                 yield I.LOAD_CLOSURE(freevar)
                             yield I.BUILD_TUPLE(len(frees))
-                        code, loc_map = self.lower(name, co_filename, _line, doc, args, frees, suite)
+                        code, loc_map = self.lower(name, co_filename, _line,
+                                                   doc, args, frees, suite)
                         inner_frees.update(code.co_freevars)
                         loc_maps.append((code, loc_map))
                         yield I.LOAD_CONST(code)

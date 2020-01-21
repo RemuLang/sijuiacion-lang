@@ -16,6 +16,14 @@ def LOAD_GLOBAL(n):
     return Instr(instr_names.LOAD_GLOBAL, n)
 
 
+def STORE_GLOBAL(n):
+    return Instr(instr_names.STORE_GLOBAL, n)
+
+
+def COMPARE_OP(n):
+    return Instr(instr_names.COMPARE_OP, n)
+
+
 def RAISE_VARARGS(i):
     return Instr(instr_names.RAISE_VARARGS, i)
 
