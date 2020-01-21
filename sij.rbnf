@@ -13,6 +13,8 @@ Instr : 'load'   <ID>
       | 'deref'  <ID>
       | 'deref!' <ID>
       | 'const'  <PY>
+      | 'extern' <PY>
+      | 'glob'   <ID>
 
       | 'print'
       | 'pop'

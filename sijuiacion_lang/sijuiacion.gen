@@ -8,7 +8,9 @@ data Load(Instr) name:str;
 data Store(Instr) name:str;
 data Deref(Instr) name:str;
 data RefSet(Instr) name:str;
+data Glob(Instr) name:str;
 data Const(Instr) val:object;
+data Extern(Instr) code:str;
 
 data Pop(Instr);
 data ROT(Instr) n:int;

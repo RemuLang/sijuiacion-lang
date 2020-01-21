@@ -63,6 +63,8 @@ class Lower:
                 with match(instr):
                     if sij.Line(no):
                         _line = no
+                    if sij.Glob(name):
+                        yield I.LOAD_GLOBAL(name)
                     if sij.Load(name):
                         yield I.LOAD_FAST(name)
                     if sij.Store(name):
@@ -72,6 +74,8 @@ class Lower:
                     if sij.RefSet(name):
                         yield I.STORE_DEREF(name)
                     if sij.Const(val):
+                        yield I.LOAD_CONST(val)
+                    if sij.Extern(val):
                         contained = const_pool.get(val)
                         if not contained:
                             val_o = eval(val, self.env.__dict__)

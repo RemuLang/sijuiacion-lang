@@ -67,8 +67,22 @@ class RefSet(Instr):
 
 @adt_recog
 @dataclass(frozen=True, order=True)
+class Glob(Instr):
+    name:str
+    pass
+
+
+@adt_recog
+@dataclass(frozen=True, order=True)
 class Const(Instr):
     val:object
+    pass
+
+
+@adt_recog
+@dataclass(frozen=True, order=True)
+class Extern(Instr):
+    code:str
     pass
 
 

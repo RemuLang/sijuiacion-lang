@@ -1,15 +1,11 @@
-from sijuiacion_lang.lowering import sij, lower
+from sijuiacion_lang.lowering import sij, Lower
+
+lowerer = Lower(env={})
 
 
 def mk_code(label):
     assert label in 'abcd'
-    return lower(
-    "name",
-    "fname",
-    1,
-    "no doc",
-    [],
-    [
+    return lowerer.lower("name", "fname", 1, "no doc", [], [], [
         sij.BlockAddr(label),
         sij.Indir(),
         sij.Const(5),
@@ -28,15 +24,15 @@ def mk_code(label):
         sij.Return(),
     ])
 
+
 print("a".center(20, '='))
-exec(mk_code("a"))
+exec(mk_code("a")[0])
 
 print("b".center(20, '='))
-exec(mk_code("b"))
+exec(mk_code("b")[0])
 
 print("c".center(20, '='))
-exec(mk_code("c"))
-
+exec(mk_code("c")[0])
 
 # Output:
 # =========a==========
@@ -49,15 +45,12 @@ exec(mk_code("c"))
 # =========c==========
 # 8
 
+
 def f(x):
     pass
-code = lower(
-"name",
-"fname",
-1,
-"no doc",
-["x"],
-[
+
+
+code, _ = lowerer.lower("name", "fname", 1, "no doc", ["x"], [], [
     sij.Load("x"),
     sij.Switch({
         11: "a",
@@ -74,14 +67,13 @@ code = lower(
     sij.Const(7),
     sij.Print(),
     sij.Label("c"),
-    sij.Const(8),
+    sij.Extern("114514"),
     sij.Print(),
     sij.Label("d"),
     sij.Const(None),
-    sij.Return(),
+    sij.Return()
 ])
 f.__code__ = code
-
 
 print("input=11".center(20, '='))
 f(11)
@@ -89,11 +81,12 @@ f(11)
 print("input=45".center(20, '='))
 f(45)
 
-# ======input=11======
-# 6
-# 7
-# 8
-# ======input=45======
-# 7
-# 8
-
+"""
+======input=11======
+6
+7
+114514
+======input=45======
+7
+114514
+"""

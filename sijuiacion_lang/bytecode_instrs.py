@@ -11,6 +11,8 @@ def LOAD_CONST(val):
 def LOAD_FAST(n):
     return Instr(instr_names.LOAD_FAST, n)
 
+def LOAD_GLOBAL(n):
+    return Instr(instr_names.LOAD_GLOBAL, n)
 
 def LOAD_DEREF(n):
     # will resolve free/cell var later

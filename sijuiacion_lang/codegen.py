@@ -137,7 +137,7 @@ class Codegen:
                     }[instrname](tk.value)
                 if tk.idint == self.PY_t:
                     assert instrname == "const"
-                    return sij.Const(tk.value[1:-1])
+                    return sij.Extern(tk.value[1:-1])
                 if tk.idint == self.INT_t:
                     return {
                         'rot': sij.ROT,
