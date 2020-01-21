@@ -11,11 +11,14 @@ def LOAD_CONST(val):
 def LOAD_FAST(n):
     return Instr(instr_names.LOAD_FAST, n)
 
+
 def LOAD_GLOBAL(n):
     return Instr(instr_names.LOAD_GLOBAL, n)
 
+
 def RAISE_VARARGS(i):
     return Instr(instr_names.RAISE_VARARGS, i)
+
 
 def LOAD_DEREF(n):
     # will resolve free/cell var later
@@ -82,6 +85,10 @@ def INPLACE_BINARY(bin_op):
 
 def UNARY(u_op):
     return Instr('UNARY_' + u_op.name)
+
+
+def UNPACK_SEQUENCE(n: int):
+    return Instr(instr_names.UNPACK_SEQUENCE, n)
 
 
 def LOAD_ATTR(n):

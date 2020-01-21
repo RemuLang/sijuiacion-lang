@@ -12,6 +12,7 @@ data Glob(Instr) name:str;
 data Const(Instr) val:object;
 data Extern(Instr) code:str;
 data SimpleRaise(Instr);
+data Unpack(Instr) n:int;
 
 data Pop(Instr);
 data ROT(Instr) n:int;

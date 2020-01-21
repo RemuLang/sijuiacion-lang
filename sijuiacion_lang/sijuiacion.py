@@ -94,6 +94,13 @@ class SimpleRaise(Instr):
 
 @adt_recog
 @dataclass(frozen=True, order=True)
+class Unpack(Instr):
+    n:int
+    pass
+
+
+@adt_recog
+@dataclass(frozen=True, order=True)
 class Pop(Instr):
     pass
 
