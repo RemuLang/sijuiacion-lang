@@ -6,14 +6,14 @@ with Path('README.md').open(encoding='utf8') as readme:
 
 setup(
     name='sijuiacion-lang',
-    version="0.1.2  ",
+    version="0.1.3",
     keywords="",  # keywords of your project that separated by comma ","
     description="",  # a conceise introduction of your project
     long_description=readme,
     long_description_content_type="text/markdown",
     license='mit',
     python_requires='>=3.6.0',
-    url='https://github.com/thautwarm/sijuiacion-lang',
+    url='https://github.com/RemuLang/sijuiacion-lang',
     author='thautwarm',
     author_email='twshere@outlook.com',
     packages=find_packages(),
