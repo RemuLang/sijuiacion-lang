@@ -1,6 +1,4 @@
 # moshmosh?
-# +quick-lambda
-# +pipeline
 # +pattern-matching
 
 from sijuiacion_lang.blockaddr import resolve_blockaddr, NamedLabel, LabelValue, LabelValueMap, WHY_CONTINUE
@@ -12,9 +10,7 @@ from types import ModuleType
 import bytecode as bytec
 import typing as t
 import sys
-
 PY38 = sys.version_info >= (3, 8)
-
 
 def find_indir_targets(instrs):
     ret = set()
@@ -25,11 +21,9 @@ def find_indir_targets(instrs):
             ret.update(instr.table.values())
     return ret
 
-
 class UnmarshalObject:
     __slots__ = []
     pass
-
 
 class Lower:
     def __init__(self, env=None):
@@ -60,9 +54,10 @@ class Lower:
                 yield I.STORE_FAST(PR.REG_TEST_INDIR_JUMPED)
             for i, instr in enumerate(instrs):
                 i = i + 1
+                if isinstance(no, sij.Line):
+                     _line = no
+                     continue
                 with match(instr):
-                    if sij.Line(no):
-                        _line = no
                     if sij.Glob(name):
                         yield I.LOAD_GLOBAL(name)
                     if sij.Load(name):
