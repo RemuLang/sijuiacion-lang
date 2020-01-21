@@ -23,7 +23,7 @@ def _code_template():
             nest(co_consts[index], nest_info)
 
     nest(code, info)
-    exec(code)
+    return eval(code)
 
 
 def link_constants(cg, code, info):
