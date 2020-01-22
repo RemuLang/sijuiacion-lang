@@ -106,7 +106,7 @@ class Lower:
                         if n is 2:
                             yield I.ROT2()
                         else:
-                            yield I.ROT3(3)
+                            yield I.ROT3()
                     if sij.DUP(n):
                         # TODO
                         for each in range(n):
