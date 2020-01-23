@@ -16,12 +16,6 @@ use `END_FINALLY` to achieve this "fast switch" in Python.
 
 # Installation
 
-Clone this repo, and
-
-```
-pip install -U moshmosh-base --no-compile
-cd sijuiacion-lang
-pip install . --no-compile
-```
+`pip install sijuiacion-lang` is okay.
 
 For manuals, check out the [documentation](https://sijuiacion-lang.readthedocs.io/en/latest/index.html).
