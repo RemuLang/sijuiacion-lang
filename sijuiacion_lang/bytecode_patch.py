@@ -1,7 +1,6 @@
 from bytecode import Instr
 from bytecode import concrete, instr
 from marshal import dumps
-import math
 
 __all__ = ['IndirectJump']
 
